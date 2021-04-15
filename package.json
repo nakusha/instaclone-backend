@@ -2,8 +2,8 @@
   "name": "instaclone-backend",
   "version": "1.0.0",
   "description": "",
-    "scripts": {
-    "dev": ""
+  "scripts": {
+    "dev": "nodemon --exec node server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/nakusha/instaclone-backend/issues"
   },
-  "homepage": "https://github.com/nakusha/instaclone-backend#readme"
+  "homepage": "https://github.com/nakusha/instaclone-backend#readme",
+  "dependencies": {
+    "apollo-server": "^2.23.0",
+    "graphql": "^15.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }
