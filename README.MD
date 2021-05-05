@@ -19,3 +19,11 @@
 
 > npx prisma migrate dev  
 > SQL File 생성 및 DB에 자동 추가
+
+## Prisma Studio
+
+> npx prisma studio
+
+## GraphQL-tools
+
+> https://www.graphql-tools.com/docs/introduction/
