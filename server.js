@@ -1,14 +1,46 @@
-const { ApolloServer, gql } = require('apollo-server');
+import { PrismaClient } from '@prisma/client';
+import { ApolloServer, gql } from 'apollo-server';
+
+// default node_moduels/@prisma/client에있음
+const client = new PrismaClient()
 
 const typeDefs = gql`
-  type Query{
-    hello: String
+  type Movie {
+    id: Int!
+    title: String!
+    year: Int!
+    genre: String
+    createdAt: String!
+    updatedAt: String!
+  }
+  type Query {
+    movies: [Movie]
+    movie(id: Int!): Movie
+  }
+  type Mutation {
+    createMovie(title: String!, year: Int!, genre: String): Movie
+    deleteMovie(id: Int!): Boolean
   }
 `
 
 const resolvers = {
   Query: {
-    hello: () => "test"
+    movies: () => client.movie.findMany(),
+    movie: (_, {id}) => ({title:"hello", year:2021})
+  },
+  Mutation: {
+    createMovie: (_, { title, year, genre }) =>
+      client.movie.create({
+        data: {
+          title,
+          year,
+          genre,
+        },
+      }),
+    deleteMovie: (_, {id}) => {
+      client.movie.delete({data:{id}})
+      return false
+    }
   }
 }
 
