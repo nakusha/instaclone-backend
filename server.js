@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { ApolloServer, gql } from 'apollo-server';
+import { PrismaClient } from '@prisma/client'
+import { ApolloServer, gql } from 'apollo-server'
 
 // default node_moduels/@prisma/client에있음
 const client = new PrismaClient()
@@ -19,14 +19,15 @@ const typeDefs = gql`
   }
   type Mutation {
     createMovie(title: String!, year: Int!, genre: String): Movie
-    deleteMovie(id: Int!): Boolean
+    deleteMovie(id: Int!): Movie
+    updateMovie(id: Int!, title: String, year: Int, genre: String): Movie
   }
 `
 
 const resolvers = {
   Query: {
     movies: () => client.movie.findMany(),
-    movie: (_, {id}) => ({title:"hello", year:2021})
+    movie: (_, { id }) => client.movie.findUnique({ where: { id } }),
   },
   Mutation: {
     createMovie: (_, { title, year, genre }) =>
@@ -37,18 +38,17 @@ const resolvers = {
           genre,
         },
       }),
-    deleteMovie: (_, {id}) => {
-      client.movie.delete({data:{id}})
-      return false
-    }
-  }
+    deleteMovie: (_, { id }) => client.movie.delete({ where: { id } }),
+    updateMovie: (_, { id, title, year, genre }) =>
+      client.movie.update({ where: { id }, data: { title, year, genre } }),
+  },
 }
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
-});
+  resolvers,
+})
 
 server.listen().then(() => {
-  console.log("server is running on http://localhost:4000/")
+  console.log('server is running on http://localhost:4000/')
 })
