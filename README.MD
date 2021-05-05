@@ -27,3 +27,7 @@
 ## GraphQL-tools
 
 > https://www.graphql-tools.com/docs/introduction/
+
+## Using dotenv
+
+> https://github.com/motdotla/dotenv
