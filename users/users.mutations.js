@@ -7,12 +7,15 @@ export default {
       _,
       { firstName, lastName, userName, email, password },
     ) => {
-      // check if username or email are already on DB
-      const existingUser = await client.user.findFirst({
-        where: { OR: [{ userName }, { email }] },
-      })
+      try {
+        // check if username or email are already on DB
+        const existingUser = await client.user.findFirst({
+          where: { OR: [{ userName }, { email }] },
+        })
 
-      if (!existingUser) {
+        if (existingUser) {
+          throw new Error('This username/password is already taken.')
+        }
         // hash password
         const hashPassword = await bcrypt.hash(password, 10)
 
@@ -26,8 +29,9 @@ export default {
             password: hashPassword,
           },
         })
+      } catch (e) {
+        return e
       }
-      return
     },
   },
 }
